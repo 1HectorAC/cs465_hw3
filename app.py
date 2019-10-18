@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, abort
+from flask import Flask, jsonify, abort, request
 from datetime import datetime
 app = Flask(__name__)
 
@@ -29,8 +29,16 @@ def activity(id):
         abort(404)
     return jsonify(activity_log[id])
 
-@app.route('/')
-def hello():
-    return "hello"
+@app.route('/api/activities', methods=["POST"])
+def new_activity():
+    if not request.json:
+        abort(400)
+
+    new_entry = request.get_json()
+    if 'user_id' not in new_entry or 'username' not in new_entry or 'timestamp' not in new_entry or 'details' not in new_entry:
+        abort(400)
+    
+    new_entry["id"] = 2
+    return jsonify(new_entry)
 
 
