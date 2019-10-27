@@ -35,6 +35,14 @@ activity_log = [
 def activities():
     return_log = user_activity.objects.to_json()
     logList = json.loads(return_log)
+
+    #fix formating of timestamp and id for each entry
+    if(len(logList) > 0):
+        for i in range(len(logList)):
+            logList[i]["timestamp"] = str(datetime.utcfromtimestamp(int(logList[i]["timestamp"]["$date"] / 1000)))
+            logList[i]["id"] = str(logList[i]["_id"]["$oid"])
+            logList[i].pop("_id")
+    
     return jsonify({'activity_log': logList})
 
 @app.route('/api/activities/<int:id>', methods=["GET"])
