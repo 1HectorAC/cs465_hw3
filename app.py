@@ -33,8 +33,9 @@ activity_log = [
 
 @app.route('/api/activities/', methods=["GET"])
 def activities():
-    userList = user_activity.objects.to_json()
-    return jsonify({'activity_log': activity_log})
+    return_log = user_activity.objects.to_json()
+    logList = json.loads(return_log)
+    return jsonify({'activity_log': logList})
 
 @app.route('/api/activities/<int:id>', methods=["GET"])
 def activity(id):
