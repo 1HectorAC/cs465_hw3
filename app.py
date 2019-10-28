@@ -57,6 +57,14 @@ def new_activity():
     )
     new_activity.save()
 
-    return jsonify({})
+    activityDict = user_activity.objects(id = new_activity["id"]).to_json()
+    newActivityDict = json.loads(activityDict)
+
+    #fix format of id and timestamp
+    newActivityDict[0]["id"] = str(newActivityDict[0]["_id"]["$oid"])
+    newActivityDict[0].pop("_id")
+    newActivityDict[0]["timestamp"] = str(datetime.utcfromtimestamp(int(newActivityDict[0]["timestamp"]["$date"] / 1000)))
+
+    return jsonify(newActivityDict[0])
 
 
