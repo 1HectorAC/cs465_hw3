@@ -29,10 +29,18 @@ def test_post_activty_returns_proper_format():
     data = json.loads(response.get_data())
     assert isinstance(data, dict)
 
-def test_post_has_id_in_return():
+def test_post_activty_has_id_in_return():
     response = app.test_client().post('/api/activities', data=json.dumps({"username":"test", "user_id":"10", "details":"This person is a test."}), content_type='application/json')
     data = json.loads(response.get_data())
     check = True
     if("id" not in data):
+        check = False
+    assert check
+
+def test_post_activity_has_location_in_return():
+    response = app.test_client().post('/api/activities', data=json.dumps({"username":"test", "user_id":"10", "details":"This person is a test."}), content_type='application/json')
+    data = json.loads(response.get_data())
+    check = True
+    if("location" not in data):
         check = False
     assert check

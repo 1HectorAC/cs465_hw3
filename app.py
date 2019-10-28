@@ -53,7 +53,7 @@ def new_activity():
         timestamp = datetime.utcnow(),
         username = new_entry["username"],
         user_id = new_entry["user_id"],
-        details = new_entry['details']
+        details = new_entry["details"]
     )
     new_activity.save()
 
@@ -64,6 +64,8 @@ def new_activity():
     newActivityDict[0]["id"] = str(newActivityDict[0]["_id"]["$oid"])
     newActivityDict[0].pop("_id")
     newActivityDict[0]["timestamp"] = str(datetime.utcfromtimestamp(int(newActivityDict[0]["timestamp"]["$date"] / 1000)))
+
+    newActivityDict[0]["location"] = url_for("activities", id = newActivityDict[0]["id"])
 
     return jsonify(newActivityDict[0])
 
