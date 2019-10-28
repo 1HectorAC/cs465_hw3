@@ -73,6 +73,6 @@ def new_activity():
 
     newActivityDict[0]["location"] = url_for("activities", id = newActivityDict[0]["id"])
 
-    return jsonify(newActivityDict[0])
+    return jsonify(newActivityDict[0]), 201
 
 

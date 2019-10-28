@@ -51,5 +51,11 @@ def test_post_activty_allow_entering_timestamp():
     response = app.test_client().post('/api/activities', data=json.dumps({"username":"test", "user_id":"10", "details":"This person is a test.", "timestamp":enteredTimestamp}), content_type='application/json')
     data = json.loads(response.get_data())
 
+    #cut out the miliseconds from the timestamp since it is removed in the process of returning from api call
     enteredTimestamp = enteredTimestamp[:-7]
+
     assert enteredTimestamp == data["timestamp"]
+
+def test_post_activity_correct_success_status_code():
+    response = app.test_client().post('/api/activities', data=json.dumps({"username":"test", "user_id":"10", "details":"This person is a test."}), content_type='application/json')
+    assert response.status_code == 201
