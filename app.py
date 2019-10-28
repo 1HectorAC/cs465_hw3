@@ -49,8 +49,14 @@ def new_activity():
     if 'user_id' not in new_entry or 'username' not in new_entry or 'details' not in new_entry:
         abort(400)
     
+    enteredTimeStamp = ""
+    if "timestamp" not in new_entry:
+        enteredTimeStamp = datetime.utcnow()
+    else:
+        enteredTimeStamp = new_entry["timestamp"]
+
     new_activity = user_activity(
-        timestamp = datetime.utcnow(),
+        timestamp = enteredTimeStamp,
         username = new_entry["username"],
         user_id = new_entry["user_id"],
         details = new_entry["details"]

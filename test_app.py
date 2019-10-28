@@ -1,6 +1,7 @@
 from app import activities
 from app import app
 from flask import json
+from datetime import datetime
 
 def test_get_activities_formats_log():
     response = app.test_client().get('/api/activities/',content_type='application/json')
@@ -44,3 +45,11 @@ def test_post_activity_has_location_in_return():
     if("location" not in data):
         check = False
     assert check
+
+def test_post_activty_allow_entering_timestamp():
+    enteredTimestamp = str(datetime.utcnow())
+    response = app.test_client().post('/api/activities', data=json.dumps({"username":"test", "user_id":"10", "details":"This person is a test.", "timestamp":enteredTimestamp}), content_type='application/json')
+    data = json.loads(response.get_data())
+
+    enteredTimestamp = enteredTimestamp[:-7]
+    assert enteredTimestamp == data["timestamp"]
