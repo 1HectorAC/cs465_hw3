@@ -59,3 +59,7 @@ def test_post_activty_allow_entering_timestamp():
 def test_post_activity_correct_success_status_code():
     response = app.test_client().post('/api/activities', data=json.dumps({"username":"test", "user_id":"10", "details":"This person is a test."}), content_type='application/json')
     assert response.status_code == 201
+
+def test_post_activity_no_json_entered_status_code():
+    response = app.test_client().post('/api/activities', data="testvalue", content_type='application/json')
+    assert response.status_code == 400
