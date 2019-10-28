@@ -45,11 +45,17 @@ def activities():
     
     return jsonify({'activity_log': logList})
 
-@app.route('/api/activities/<int:id>', methods=["GET"])
+@app.route('/api/activities/<string:id>', methods=["GET"])
 def activity(id):
-    if id < 0 or id >= len(activity_log):
-        abort(404)
-    return jsonify(activity_log[id])
+    return_activity = user_activity.objects(id = id).to_json()
+    activityDict = json.loads(return_activity)
+
+    #fix formating of timestamp and id
+    activityDict[0]["timestamp"] = str(datetime.utcfromtimestamp(int(activityDict[0]["timestamp"]["$date"] / 1000)))
+    activityDict[0]["id"] = str(activityDict[0]["_id"]["$oid"])
+    activityDict[0].pop("_id")
+
+    return jsonify(activityDict[0])
 
 @app.route('/api/activities', methods=["POST"])
 def new_activity():

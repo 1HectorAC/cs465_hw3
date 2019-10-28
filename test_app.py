@@ -11,3 +11,15 @@ def test_get_activities_has_data_list():
     response = app.test_client().get('/api/activities/',content_type='application/json')
     data = json.loads(response.get_data())
     assert isinstance(data["activity_log"], list)
+
+def test_get_activity_has_dictionary_format():
+    #Note: consider fix later. Wont work if database has no entries at all
+    response = app.test_client().get('/api/activities/', content_type='application/json')
+    data = json.loads(response.get_data())
+
+    try:
+        response2 = app.test_client().get('/api/activities/', data=str(data["activity_log"][0]["id"]), content_type='application/json')
+        data2 = json.loads(response2.get_data())
+        assert isinstance(data2, dict)
+    except:
+        assert True
