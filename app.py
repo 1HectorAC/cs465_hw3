@@ -19,7 +19,7 @@ class user_activity(Document):
 def activities():
     return_log = user_activity.objects.to_json()
     logList = json.loads(return_log)
-
+    logList = logList[-app.config['N']:]
     #fix formating of timestamp and id for each entry
     if(len(logList) > 0):
         for i in range(len(logList)):
