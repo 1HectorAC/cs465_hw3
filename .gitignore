@@ -3,3 +3,4 @@ dev.settings
 rundev.sh
 runtests.sh
 cov.sh
+.vscode
