@@ -1,2 +1,5 @@
 dev.settings
 .coverage
+rundev.sh
+runtests.sh
+cov.sh
