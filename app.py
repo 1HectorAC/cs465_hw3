@@ -3,11 +3,12 @@ from random import randint
 from flask import Flask, jsonify, abort, request, url_for
 from mongoengine import connect, DateTimeField, StringField, IntField, Document
 import json
+import os
 
 app = Flask(__name__)
 
-app.config.from_envvar('M_APP_SETTINGS')
-connect(db=app.config['DATABASE_NAME'], host=app.config['DATABASE_HOST_URL'], port=27017)
+
+connect(host=os.getenv('DATABASE_HOST_URL'), port=27017)
 
 class user_activity(Document):
     timestamp = DateTimeField(default=datetime.utcnow)
@@ -17,7 +18,7 @@ class user_activity(Document):
 
 @app.route('/api/activities/', methods=["GET"])
 def activities():
-    return_log = user_activity.objects.all().order_by("-timestamp").limit(app.config['N']).to_json()
+    return_log = user_activity.objects.all().order_by("-timestamp").limit(int(os.getenv('N'))).to_json()
     logList = json.loads(return_log)
     #fix formating of timestamp and id for each entry
     if(len(logList) > 0):
