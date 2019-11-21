@@ -4,11 +4,13 @@ from flask import Flask, jsonify, abort, request, url_for
 from mongoengine import connect, DateTimeField, StringField, IntField, Document
 import json
 import os
+import time
 
 app = Flask(__name__)
 
 
 connect(host=os.getenv('DATABASE_HOST_URL'), port=27017)
+sleep_time = os.getenv('SLEEP_TIME', default=0)
 
 class user_activity(Document):
     timestamp = DateTimeField(default=datetime.utcnow)
@@ -62,6 +64,7 @@ def new_activity():
         details = new_entry["details"]
     )
     new_activity.save()
+    time.sleep(int(sleep_time))
 
     activityDict = user_activity.objects(id = new_activity["id"]).to_json()
     newActivityDict = json.loads(activityDict)
